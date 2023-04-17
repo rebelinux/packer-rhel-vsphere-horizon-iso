@@ -2,12 +2,16 @@
 
 # Remove Unneeded Packages
 echo "===> Remove Unneeded Packages"
-dnf remove -y gcc-c++ kernel-devel-$(uname -r) kernel-headers-$(uname -r) patch elfutils-libelf-devel make
+dnf remove -y gcc-c++ kernel-devel-$(uname -r) kernel-headers-$(uname -r) patch elfutils-libelf-devel make gnome-initial-setup
 
 # Disable Automatic Updates
 echo "===> Disable Automatic Updates"
 systemctl stop packagekit
 systemctl mask packagekit
+
+# Disable System Not Registered notification from GNOME
+echo "===> Disable System Not Registered notification from GNOME"
+sed -i /lib/systemd/user/org.gnome.SettingsDaemon.Subscription.service -e 's/ExecStart=*/#ExecStart/g'
 
 # "Cleaning all audit logs."
 echo "===> "Cleaning all audit logs.""

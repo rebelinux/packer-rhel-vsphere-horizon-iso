@@ -78,11 +78,6 @@ variable "horizon_agent_datastore" {
   default = ""
 }
 
-variable "timezone" {
-  type =  string
-  default = "Etc/UTC"
-}
-
 variable "cpu_num" {
   type    = number
   default = 2
@@ -291,15 +286,15 @@ source "vsphere-iso" "rhel" {
 build {
   sources = ["source.vsphere-iso.rhel"]
 
-  // Uncomment this to copy horizon files from vcenter datastore and used it as a web server.
-  // This part of the code download the horizon agent from a datastore from Vcenter/ESXi host.
-  // To get the file URL use the vcenter "Browse datastores in the vSphere inventory" tool.
-  // IS your responsability to construct the URL correctly. Good Luck!
-  provisioner "shell" {
-    inline = [
-      "curl -k --user '${var.vsphere_username}:${var.vsphere_password}' -X GET -o ./${var.horizon_agent_file} --output-dir '/tmp/' 'https://${var.vsphere_server}/folder${var.horizon_agent_path}${var.horizon_agent_file}?dcPath=${var.vsphere_datacenter}&dsName=${var.horizon_agent_datastore}'" 
-      ]
-  }
+  //  Uncomment this to copy horizon files from vcenter datastore and used it as a web server.
+  //  This part of the code download the horizon agent from a datastore from Vcenter/ESXi host.
+  //  To get the file URL use the vcenter "Browse datastores in the vSphere inventory" tool.
+  //  IS your responsability to construct the URL correctly. Good Luck!
+  //   provisioner "shell" {
+  //     inline = [
+  //       "curl -k --user '${var.vsphere_username}:${var.vsphere_password}' -X GET -o ./${var.horizon_agent_file} --output-dir '/tmp/' 'https://${var.vsphere_server}/folder${var.horizon_agent_path}${var.horizon_agent_file}?dcPath=${var.vsphere_datacenter}&dsName=${var.horizon_agent_datastore}'" 
+  //       ]
+  //   }
 
   // Uncomment this to copy local horizon files from ./file/ to /tmp
   // This other option permit to copy the horizon agent installation file from the /files local directory.

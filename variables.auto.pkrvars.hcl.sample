@@ -37,6 +37,11 @@ shell_scripts           = [
     "./setup/cleanup.sh"
     ]
 
+# RHEL OS Settings
+vm_guest_os_language = "en_US.UTF-8"
+vm_guest_os_keyboard = "us"
+vm_guest_os_timezone = "UTC"
+
 # SSH username
 build_username = "godadmin"
 
@@ -50,7 +55,6 @@ iso_path = ["[vmware-nfs] /iso/ubuntu-22.04.1-live-server-amd64.iso"]
 
 # NTP Server
 ntp_server = "changeme"
-timezone = "changeme"
 
 # AD Domain
 ad_domain = "CHANGEME"
@@ -62,16 +66,11 @@ join_password = "changeme"
 join_username = "changeme"
 
 # Horizon Agent install file location
-horizon_agent_datastore = "HDD-VM-ISO-LOW-PERF"
-horizon_agent_path = "/ISO/VMWARE/Horizon/"
-horizon_agent_file = "VMware-horizonagent-linux-x86_64-2303-8.9.0-21434177.tar.gz"
+# horizon_agent_datastore = "HDD-VM-ISO-LOW-PERF"
+# horizon_agent_path = "/ISO/VMWARE/Horizon/"
+# horizon_agent_file = "VMware-horizonagent-linux-x86_64-2303-8.9.0-21434177.tar.gz"
 
 # The credential to register Red Hat Subscription Manager
 rhsm_username = "changeme"
 rhsm_password = "changeme"
 
-vm_guest_os_language = "en_US.UTF-8"
-
-vm_guest_os_keyboard = "us"
-
-vm_guest_os_timezone = "UTC"

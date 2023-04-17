@@ -96,7 +96,6 @@ xconfig --startxonboot
 @internet-applications
 @office-suite
 @system-tools
--gnome-initial-setup
 %end
 
 ### Post-installation commands.
