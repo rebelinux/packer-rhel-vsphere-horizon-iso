@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Remove Unneeded Packages
+echo "===> Remove Unneeded Packages"
+dnf remove -y gcc-c++ kernel-devel-$(uname -r) kernel-headers-$(uname -r) patch elfutils-libelf-devel make
+
+# Disable Automatic Updates
+echo "===> Disable Automatic Updates"
+systemctl stop packagekit
+systemctl mask packagekit
+
 # "Cleaning all audit logs."
 echo "===> "Cleaning all audit logs.""
 if [ -f /var/log/audit/audit.log ]; then

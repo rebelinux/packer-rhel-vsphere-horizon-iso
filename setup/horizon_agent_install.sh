@@ -79,7 +79,7 @@ then
         cd "/tmp/hzagentdir"
 
         echo "===> Looking for vhci-hcd driver status"
-        if [ -f "/usr/lib/modules/$(uname -r)/kernel/drivers/usb/usbip/vhci-hcd.ko" ]
+        if [ -f "/usr/lib/modules/$(uname -r)/kernel/drivers/usb/host/usb-vhci-hcd.ko" ]
         then
             echo "===> Found vhci-hcd driver, enabling Horizon USB redirection"
             INSTALL_OPTIONS="-A yes -U yes"

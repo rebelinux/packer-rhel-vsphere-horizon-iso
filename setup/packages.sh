@@ -1,11 +1,19 @@
 #!/bin/bash
 
-# Disable Ubuntu AutoUpdate
-# echo '> Disable invalid v4l2loopback driver...'
-# echo "override v4l2loopback * extra" >> /etc/depmod.d/ubuntu.conf
-# depmod -A
-# sudo rmmod v4l2loopback
-
 # Install Additional Packages
-# echo "===> Installing additional packages"
-dnf install -y gcc-c++ kernel-devel-$(uname -r) kernel-headers-$(uname -r) patch elfutils-libelf-devel
+echo "===> Installing additional packages"
+dnf install -y gcc-c++ kernel-devel-$(uname -r) kernel-headers-$(uname -r) patch elfutils-libelf-devel gimp 
+
+# Install Google Chrome Package
+echo "===> Install Google Chrome Package"
+dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+
+# Install Microsoft Repo and key Package
+echo "===> Install Microsoft Repo and key Package"
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+
+# Install Microsoft VSCode
+echo "===> Install Microsoft VSCode"
+dnf check-update
+dnf install -y code
