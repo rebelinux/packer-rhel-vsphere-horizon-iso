@@ -100,12 +100,22 @@ xconfig --startxonboot
 
 ### Post-installation commands.
 %post
+# Register Redhat Subscription Manager
 /usr/sbin/subscription-manager register --username ${rhsm_username} --password ${rhsm_password} --autosubscribe --force
 /usr/sbin/subscription-manager repos --enable "codeready-builder-for-rhel-9-x86_64-rpms"
 dnf install -y "https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm"
 dnf makecache
 dnf -y update
 dnf install -y sudo open-vm-tools perl libappindicator-gtk3 krb5-workstation sssd adcli samba-common-tools oddjob oddjob-mkhomedir realmd
+
+#To enable audio input and audio output redirection on a RHEL 9.x desktop, you must install the PulseAudio sound server on the source virtual machine, as described in the following procedure. By default, RHEL 9.x systems manage sound using the PipeWire server, which does not support audio redirection in remote sessions.
+dnf swap --allowerasing pipewire-pulseaudio pulseaudio
+dnf remove pipewire-alsa pipewire-jack-audio-connection-kit
+dnf install -y alsa-plugins-pulseaudio
+dnf install -y pulseaudio-module-x11 pulseaudio-utils
+systemctl --user start pulseaudio.socket
+systemctl --user start pulseaudio.service
+
 sed -i "/etc/crypto-policies/back-ends/krb5.config" -e 's/permitted_enctypes = aes256-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128 aes128-cts-hmac-sha1-96/permitted_enctypes = aes256-cts-hmac-sha1-96 aes256-cts-hmac-sha384-192 aes128-cts-hmac-sha256-128 aes128-cts-hmac-sha1-96 +rc4/g'
 echo "${build_username} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/${build_username}
 sed -i "s/^.*requiretty/#Defaults requiretty/" /etc/sudoers

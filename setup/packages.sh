@@ -8,4 +8,4 @@
 
 # Install Additional Packages
 # echo "===> Installing additional packages"
-# dnf install -y libappindicator-gtk3 krb5-workstation sssd adcli samba-common-tools oddjob oddjob-mkhomedir realmd
+dnf install -y gcc-c++ kernel-devel-$(uname -r) kernel-headers-$(uname -r) patch elfutils-libelf-devel
