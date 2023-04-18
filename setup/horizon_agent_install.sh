@@ -56,12 +56,12 @@ then
         # Extracting VHCI-HCD driver files
         echo "===> Extracting VHCI-HCD driver files"
         cd "/tmp/"
-        tar -zxf "vhci-hcd-1.15.tar.gz" --overwrite
+        tar -zxf "vhci-hcd-1.15.tar.gz" --overwrite 
 
         # Patching VHCI-HCD driver files
         echo "===> Patching VHCI-HCD driver files"
         cd "/tmp/vhci-hcd-1.15"
-        patch -p1 < "/tmp/hzagentdir/resources/vhci/patch/vhci.patch"
+        patch -p1 < "/tmp/hzagentdir/resources/vhci/patch/vhci.patch" 
 
         # Compiling VHCI-HCD driver files
         echo "===> Compiling VHCI-HCD driver files"

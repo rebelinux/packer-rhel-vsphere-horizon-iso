@@ -2,12 +2,12 @@
 
 # Remove Unneeded Packages
 echo "===> Remove Unneeded Packages"
-dnf remove -y gcc-c++ kernel-devel-$(uname -r) kernel-headers-$(uname -r) patch elfutils-libelf-devel make gnome-initial-setup
+dnf remove -q -y gcc-c++ kernel-devel-$(uname -r) kernel-headers-$(uname -r) patch elfutils-libelf-devel make gnome-initial-setup &>/dev/null
 
 # Disable Automatic Updates
 echo "===> Disable Automatic Updates"
-systemctl stop packagekit
-systemctl mask packagekit
+systemctl stop packagekit &>/dev/null
+systemctl mask packagekit &>/dev/null
 
 # Disable System Not Registered notification from GNOME
 echo "===> Disable System Not Registered notification from GNOME"
@@ -39,8 +39,8 @@ rm -rf /var/cache/dnf/*
 
 # "Unregistering from Red Hat Subscription Manager."
 echo "===> Unregistering from Red Hat Subscription Manager."
-subscription-manager unregister
-subscription-manager clean
+subscription-manager unregister &>/dev/null
+subscription-manager clean &>/dev/null
 
 # "Cleaning the Red Hat Subscription Manager logs."
 echo "===> Cleaning the Red Hat Subscription Manager logs."

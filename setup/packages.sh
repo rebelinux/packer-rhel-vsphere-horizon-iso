@@ -2,11 +2,11 @@
 
 # Install Additional Packages
 echo "===> Installing additional packages"
-dnf install -y gcc-c++ kernel-devel-$(uname -r) kernel-headers-$(uname -r) patch elfutils-libelf-devel gimp 
+dnf install -q -y gcc-c++ kernel-devel-$(uname -r) kernel-headers-$(uname -r) patch elfutils-libelf-devel gimp
 
 # Install Google Chrome Package
 echo "===> Install Google Chrome Package"
-dnf install -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+dnf install -q -y https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 
 # Install Microsoft Repo and key Package
 echo "===> Install Microsoft Repo and key Package"
@@ -15,5 +15,5 @@ sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.m
 
 # Install Microsoft VSCode
 echo "===> Install Microsoft VSCode"
-dnf check-update
-dnf install -y code
+dnf -q check-update
+dnf install -q -y code

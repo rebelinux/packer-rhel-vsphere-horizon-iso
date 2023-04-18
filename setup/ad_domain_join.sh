@@ -2,7 +2,7 @@
 
 # Join AD Domain
 echo "===> Join $ADDomain Active Directory Domain"
-echo $JOINPASSWORD | sudo realm join --user=$JOINUSERNAME $ADDomain\
+echo $JOINPASSWORD | sudo realm join --user=$JOINUSERNAME $ADDomain 
 
 # Disable use_fully_qualified_names in AD Login
 echo "===> Disable use_fully_qualified_names in AD Login"
