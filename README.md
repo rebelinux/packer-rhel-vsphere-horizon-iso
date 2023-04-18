@@ -33,6 +33,24 @@ total 127M
 
 #### Option 2: Use vCenter as a Web Server to host Horizon Agent File
 
+Save the Horizon agent installation files to a staging Datastore
+
+![Sample vSphere Staging Datastore](https://raw.githubusercontent.com/rebelinux/IMG/main/VMware_horizon_agent%20package.png "Sample vSphere Staging Datastore")
+
+Get the Horizon agent file URL from the `Browse datastores in the vSphere inventory`
+
+![Copy URL](https://raw.githubusercontent.com/rebelinux/IMG/main/Datastore_URL.png "Copy URL")
+
+Next, uncomment line (292:296) and paste the vCenter URL like the provided example:
+
+```bash
+  provisioner "shell" {
+   inline = [
+     "curl -k --user '${var.vsphere_username}:${var.vsphere_password}' -X GET -o ./${var.horizon_agent_file} --output-dir '/tmp/' 'https://vcenter-01v.lab.local/folder/ISO%2fVMWARE%2fHorizon/VMware-horizonagent-linux-x86_64-2303-8.9.0-21434177.tar.gz?dcPath=PHARMAX-VSI-DC&dsName=HDD-VM-ISO-LOW-PERF'" 
+     ]
+  }
+```
+
 ### Step 2: Init Packer
 
 Init Packer by using the following command. (Spot the dot at the end of the command!)
