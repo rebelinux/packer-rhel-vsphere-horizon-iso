@@ -51,7 +51,7 @@ build_password = "godadmin"
 build_password_encrypted = "$6$rounds=4096$Y0SjrsU5WHubYJvb$0BJhswGEAokE2OqlRFTgiUhJnquzDt2hAnrb3.g3DNTATZ01VLNbxlLRLMLk.PTHiMeP8fUg9WfVx.HeL7e8E0"
 
 # ISO Objects
-iso_path = ["[vmware-nfs] /iso/ubuntu-22.04.1-live-server-amd64.iso"]
+iso_path = ["[vmware-nfs] /iso/rhel-baseos-9.1-x86_64-dvd.iso"]
 
 # NTP Server
 ntp_server = "changeme"
