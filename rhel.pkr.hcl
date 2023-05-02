@@ -78,6 +78,26 @@ variable "horizon_agent_datastore" {
   default = ""
 }
 
+variable "google_chrome_install" {
+  type =  string
+  default = "false"
+}
+
+variable "mozilla_firefox_install" {
+  type =  string
+  default = "false"
+}
+
+variable "microsoft_vscode_install" {
+  type =  string
+  default = "false"
+}
+
+variable "additional_packages" {
+  type =  string
+  default = "false"
+}
+
 variable "cpu_num" {
   type    = number
   default = 2
@@ -312,7 +332,11 @@ build {
       "JOINPASSWORD=${var.join_password}",
       "NTPSERVER=${var.ntp_server}",
       "ADDomain=${var.ad_domain}",
-      "HORIZONAGENTFILE=${var.horizon_agent_file}"
+      "HORIZONAGENTFILE=${var.horizon_agent_file}",
+      "Google_Chrome_Install=${var.google_chrome_install}",
+      "Mozilla_Firefox_Install=${var.mozilla_firefox_install}",
+      "Microsoft_VSCode_Install=${var.microsoft_vscode_install}",
+      "Additional_Packages=${var.additional_packages}"
     ]
     scripts = var.shell_scripts
     expect_disconnect = true

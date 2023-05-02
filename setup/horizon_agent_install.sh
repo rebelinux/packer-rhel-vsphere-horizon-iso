@@ -1,120 +1,145 @@
 #!/bin/bash
 
+# Author: Jonathan Colon
+# Date Created: 10/04/2023
+# Last Modified: 30/04/2023
+
+# Description
+# The main purpose of this script is to install and configure the Horizon Agent for linux. The script tries its best to 
+# compile support for USB and Real-Time Audio-Video redirection.
+
+# Usage
+# horizon_agent_install
+
 # Extracting VMware Horizon Agent files
 if [ -f "/tmp/$HORIZONAGENTFILE" ]
 then
-    echo "===> Extracting VMware Horizon Agent files to /tmp/hzagentdir directory"
+    printf "===> Extracting VMware Horizon Agent files to /tmp/hzagentdir directory\n"
     if [ ! -f "/tmp/hzagentdir" ] 
     then
-        echo "===> Creating /tmp/hzagentdir directory"
+        printf "===> Creating /tmp/hzagentdir directory\n"
         mkdir "/tmp/hzagentdir"
     else
-        echo "===> Error: Unable to create /tmp/hzagentdir directory"
+        printf "===> Error: Unable to create /tmp/hzagentdir directory\n"
     fi 
     tar -zxf "/tmp/$HORIZONAGENTFILE" -C "/tmp/hzagentdir" --strip-components=1 --overwrite
 
-    cd "/tmp/"
-
-    # Downloading V4L2Loopback driver files
-    echo "===> Downloading v4l2loopback driver files"
-    wget --quiet "https://github.com/umlaeute/v4l2loopback/archive/refs/tags/v0.12.5.tar.gz"
-    # Downloading VHCI-HCD driver files
-    echo "===> Downloading VHCI-HCD driver files"
-    wget --quiet https://sourceforge.net/projects/usb-vhci/files/linux%20kernel%20module/vhci-hcd-1.15.tar.gz/download -O "vhci-hcd-1.15.tar.gz"
-
-    tar -zxf "vhci-hcd-1.15.tar.gz"
-    
-    # Adding support for Horizon Real-Time Audio-Video
-    if [ -f "/tmp/v0.12.5.tar.gz" ] && [ -d "/tmp/hzagentdir" ]
+    retval="$?"
+    if [ $retval -ne 0 ] 
     then
-        # Extracting V4L2Loopback driver files
-        echo "===> Extracting V4L2Loopback driver files"
-        tar -zxf "v0.12.5.tar.gz" --overwrite
-
-        # Patching V4L2Loopback driver files
-        echo "===> Patching V4L2Loopback driver files"
-        cd "/tmp/v4l2loopback-0.12.5/"
-        patch -p1 < "/tmp/hzagentdir/resources/v4l2loopback/v4l2loopback.patch"
-
-        # Compiling V4L2Loopback driver files
-        echo "===> Extracting V4L2Loopback driver files"
-        make clean && make && make install
-
-        # Installing v4l2loopback-ctl
-        echo "===> Installing v4l2loopback-ctl"
-        make install-utils
-        depmod -A
+        printf "Unable to extract %s needed for the install of horizon agent for linux\n" "$HORIZONAGENTFILE"
     else
-        echo "===> Error: File v0.12.5.tar.gz does not exists."
-        echo "===> Error: Unable to compile and install V4L2Loopback driver"
-        echo "===> Error: Disable support for Horizon Real-Time Audio-Video"
-    fi
-
-    # Adding support for Horizon USB redirection
-    if [ -f "/tmp/vhci-hcd-1.15.tar.gz" ] && [ -d "/tmp/hzagentdir" ]
-    then
-        # Extracting VHCI-HCD driver files
-        echo "===> Extracting VHCI-HCD driver files"
         cd "/tmp/"
-        tar -zxf "vhci-hcd-1.15.tar.gz" --overwrite 
 
-        # Patching VHCI-HCD driver files
-        echo "===> Patching VHCI-HCD driver files"
-        cd "/tmp/vhci-hcd-1.15"
-        patch -p1 < "/tmp/hzagentdir/resources/vhci/patch/vhci.patch" 
+        # Downloading V4L2Loopback driver files
+        printf "===> Downloading v4l2loopback driver files\n"
+        wget --quiet "https://github.com/umlaeute/v4l2loopback/archive/refs/tags/v0.12.5.tar.gz"
+        # Downloading VHCI-HCD driver files
+        printf "===> Downloading VHCI-HCD driver files\n"
+        wget --quiet https://sourceforge.net/projects/usb-vhci/files/linux%20kernel%20module/vhci-hcd-1.15.tar.gz/download -O "vhci-hcd-1.15.tar.gz"
 
-        # Compiling VHCI-HCD driver files
-        echo "===> Compiling VHCI-HCD driver files"
-        make clean && make && make install
-    else
-        echo "===> Error: File vhci-hcd-1.15.tar.gz does not exists."
-        echo "===> Error: Unable to compile and install VHCI-HCD driver"
-        echo "===> Error: Disable support for Horizon USB redirection"
-    fi
-
-    # Installing Horizon Agent
-    if [ -d "/tmp/hzagentdir" ]
-    then
-        echo "===> Installing Horizon Agent"
-        cd "/tmp/hzagentdir"
-
-        echo "===> Looking for vhci-hcd driver status"
-        if [ -f "/usr/lib/modules/$(uname -r)/kernel/drivers/usb/host/usb-vhci-hcd.ko" ]
+        tar -zxf "vhci-hcd-1.15.tar.gz"
+        
+        # Adding support for Horizon Real-Time Audio-Video
+        if [ -f "/tmp/v0.12.5.tar.gz" ] && [ -d "/tmp/hzagentdir" ]
         then
-            echo "===> Found vhci-hcd driver, enabling Horizon USB redirection"
-            INSTALL_OPTIONS="-A yes -U yes"
-        else 
-            echo "===> Driver vhci-hcd not installed, disabling Horizon USB redirection"
-            INSTALL_OPTIONS="-A yes"
+            # Extracting V4L2Loopback driver files
+            printf "===> Extracting V4L2Loopback driver files\n"
+            tar -zxf "v0.12.5.tar.gz" --overwrite
+
+            # Patching V4L2Loopback driver files
+            printf "===> Patching V4L2Loopback driver files\n"
+            cd "/tmp/v4l2loopback-0.12.5/"
+            patch -p1 < "/tmp/hzagentdir/resources/v4l2loopback/v4l2loopback.patch" 1> /dev/null
+
+            # Compiling V4L2Loopback driver files
+            printf "===> Extracting V4L2Loopback driver files\n"
+            make clean > /dev/null && make > /dev/null && make install > /dev/null
+
+            # Installing v4l2loopback-ctl
+            printf "===> Installing v4l2loopback-ctl\n"
+            make install-utils 1> /dev/null
+            depmod -A 1> /dev/null
+        else
+            printf "===> Error: File v0.12.5.tar.gz does not exists.\n"
+            printf "===> Error: Unable to compile and install V4L2Loopback driver\n"
+            printf "===> Error: Disable support for Horizon Real-Time Audio-Video\n"
         fi
 
-        echo "===> Looking for V4L2Loopback driver status"
-        if [ -f "/lib/modules/$(uname -r)/extra/v4l2loopback.ko" ]
+        # Adding support for Horizon USB redirection
+        if [ -f "/tmp/vhci-hcd-1.15.tar.gz" ] && [ -d "/tmp/hzagentdir" ]
         then
-            echo "===> Found V4L2Loopback driver, enabling Horizon Real-Time Audio-Video"
-            INSTALL_OPTIONS="$INSTALL_OPTIONS -a yes --webcam"
-        else 
-            echo "===> Driver V4L2Loopback not installed, disabling Horizon Real-Time Audio-Video"
+            # Extracting VHCI-HCD driver files
+            printf "===> Extracting VHCI-HCD driver files\n"
+            cd "/tmp/"
+            tar -zxf "vhci-hcd-1.15.tar.gz" --overwrite 
+
+            # Patching VHCI-HCD driver files
+            printf "===> Patching VHCI-HCD driver files\n"
+            cd "/tmp/vhci-hcd-1.15"
+            patch -p1 < "/tmp/hzagentdir/resources/vhci/patch/vhci.patch" 1> /dev/null
+
+            # Compiling VHCI-HCD driver files
+            printf "===> Compiling VHCI-HCD driver files\n"
+            make clean > /dev/null && make > /dev/null && make install > /dev/null
+        else
+            printf "===> Error: File vhci-hcd-1.15.tar.gz does not exists.\n"
+            printf "===> Error: Unable to compile and install VHCI-HCD driver\n"
+            printf "===> Error: Disable support for Horizon USB redirection\n"
         fi
 
-        echo "===> Using install options: $INSTALL_OPTIONS"
+        # Installing Horizon Agent
+        if [ -d "/tmp/hzagentdir" ]
+        then
+            printf "===> Installing Horizon Agent\n"
+            cd "/tmp/hzagentdir"
 
-        ./install_viewagent.sh $INSTALL_OPTIONS
+            printf "===> Looking for vhci-hcd driver status\n"
+            if [ -f "/usr/lib/modules/$(uname -r)/kernel/drivers/usb/host/usb-vhci-hcd.ko" ]
+            then
+                printf "===> Found vhci-hcd driver, enabling Horizon USB redirection\n"
+                INSTALL_OPTIONS="-A yes -U yes"
+            else 
+                printf "===> Driver vhci-hcd not installed, disabling Horizon USB redirection\n"
+                INSTALL_OPTIONS="-A yes"
+            fi
 
-    else
-        echo "===> Error: Directory /tmp/hzagentdir does not exists."
-        echo "===> Error: Unable to install Horizon"
-    fi
+            printf "===> Looking for V4L2Loopback driver status\n"
+            if [ -f "/lib/modules/$(uname -r)/extra/v4l2loopback.ko" ]
+            then
+                printf "===> Found V4L2Loopback driver, enabling Horizon Real-Time Audio-Video\n"
+                INSTALL_OPTIONS="$INSTALL_OPTIONS -a yes --webcam"
+            else 
+                printf "===> Driver V4L2Loopback not installed, disabling Horizon Real-Time Audio-Video\n"
+            fi
 
-    # Setting SSSD authentication (OfflineJoinDomain=sssd)
-    if [ -f "/etc/vmware/viewagent-custom.conf" ]
-    then
-        echo "===> Setting SSSD authentication (OfflineJoinDomain=sssd)"
-        echo "OfflineJoinDomain=sssd" >> "/etc/vmware/viewagent-custom.conf"
-    else
-        echo "===> Error: File /etc/vmware/viewagent-custom.conf does not exists."
+            printf "===> Using install options: %s\n" "$INSTALL_OPTIONS"
+
+            ./install_viewagent.sh $INSTALL_OPTIONS 1> /dev/null
+
+            retval=$?
+            if [ $retval -ne 0 ] 
+            then
+                printf "===> Unable to install Horizon Agent for Linux\n"
+            else
+                printf "===> Horizon Agent for Linux installed successfully\n"
+            fi
+
+        else
+            printf "===> Error: Directory /tmp/hzagentdir does not exists.\n"
+            printf "===> Error: Unable to install Horizon\n"
+        fi
+
+        # Setting SSSD authentication (OfflineJoinDomain=sssd)
+        if [ -f "/etc/vmware/viewagent-custom.conf" ]
+        then
+            printf "===> Setting SSSD authentication (OfflineJoinDomain=sssd)\n"
+            echo "OfflineJoinDomain=sssd" >> "/etc/vmware/viewagent-custom.conf"
+        else
+            printf "===> Error: File /etc/vmware/viewagent-custom.conf does not exists.\n"
+        fi
     fi
 else
-    echo "===> Error: $HORIZONAGENTFILE File does not exists."
-    echo "===> Error: Unable to extract VMware Horizon Agent files"
+    printf "===> Error: %s File does not exists.\n" "$HORIZONAGENTFILE"
+    printf "===> Error: Unable to extract VMware Horizon Agent files\n"
 fi

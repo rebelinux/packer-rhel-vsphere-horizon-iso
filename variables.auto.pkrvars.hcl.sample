@@ -34,6 +34,7 @@ shell_scripts           = [
     "./setup/desktop_postinstall.sh",
     "./setup/ad_domain_join.sh",
     "./setup/horizon_agent_install.sh",
+    "./setup/application_install.sh",
     "./setup/cleanup.sh"
     ]
 
@@ -74,3 +75,14 @@ join_username = "changeme"
 rhsm_username = "changeme"
 rhsm_password = "changeme"
 
+# Third-Party Application install
+
+google_chrome_install = "true"
+
+mozilla_firefox_install = "true"
+
+microsoft_vscode_install = "true"
+
+# Specify aditional packages to Install
+
+additional_packages = ""
